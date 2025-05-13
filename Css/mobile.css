@@ -3,6 +3,7 @@
     body {
         font-size: 1.3em !important;
         padding: 0 2vw;
+        overflow: hidden;
     }
     #video-container {
         width: 100vw !important;
