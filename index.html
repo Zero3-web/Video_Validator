@@ -3,36 +3,148 @@
 <head>
     <meta charset="UTF-8">
     <title>Validador de Videos</title>
-    <link rel="stylesheet" href="Css/styles.css">
-    <link rel="stylesheet" href="Css/mobile.css" media="only screen and (max-width: 600px)">
+    <link rel="stylesheet" href="../Css/styles.css">
+    <link rel="stylesheet" href="../Css/light-theme.css" id="light-theme-css" disabled>
+    <link rel="stylesheet" href="../Css/responsive.css">
+    <link rel="stylesheet" href="Css/styles_VV.css">
+    <link rel="stylesheet" href="Css/mobile_VV.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+      // Sincroniza el modo claro/oscuro con la página principal
+      document.addEventListener('DOMContentLoaded', function() {
+        const themeToggle = document.getElementById('theme-toggle');
+        const lightTheme = document.getElementById('light-theme-css');
+        // Lee preferencia del localStorage
+        let theme = localStorage.getItem('theme');
+        if (theme === 'light') {
+          document.body.classList.add('light-theme');
+          if (lightTheme) lightTheme.disabled = false;
+        } else {
+          document.body.classList.remove('light-theme');
+          if (lightTheme) lightTheme.disabled = true;
+        }
+        if (themeToggle) {
+          themeToggle.addEventListener('click', function() {
+            if (document.body.classList.contains('light-theme')) {
+              document.body.classList.remove('light-theme');
+              if (lightTheme) lightTheme.disabled = true;
+              localStorage.setItem('theme', 'dark');
+            } else {
+              document.body.classList.add('light-theme');
+              if (lightTheme) lightTheme.disabled = false;
+              localStorage.setItem('theme', 'light');
+            }
+          });
+        }
+      });
+    </script>
 </head>
 <body>
+    <canvas id="particles-bg"></canvas>
+    <div id="loader">
+        <span class="loader-svg-bg">
+            <svg width="120" height="120" viewBox="0 0 120 120">
+                <circle class="loader-bg-circle" cx="60" cy="60" r="48" fill="none" stroke="#233554" stroke-width="8"/>
+                <circle class="loader-anim-circle" cx="60" cy="60" r="48" fill="none" stroke="#64ffda" stroke-width="6" stroke-linecap="round"/>
+            </svg>
+        </span>
+        <span class="loader-text">
+            <span class="z">Z</span><span class="e">e</span><span class="r">r</span><span class="o">o</span>
+        </span>
+    </div>
+    <!-- Copia de la navbar principal -->
+    <nav class="navbar">
+      <div class="logo">
+        <a href="../index.html#home"><span>Z</span></a>
+      </div>
+      <button id="hamburger" aria-label="Open menu">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </button>
+      <ul class="nav-links">
+        <li><a href="../index.html#home">Home</a></li>
+        <li><a href="../index.html#experience">Experience</a></li>
+        <li><a href="../index.html#work">Projects</a></li>
+        <li><a href="../index.html#contact">Contact</a></li>
+        <li>
+          <button id="theme-toggle" aria-label="Toggle light/dark mode">
+            <span id="theme-icon">🌙</span>
+          </button>
+        </li>
+      </ul>
+    </nav>
+    <aside class="socials">
+      <a href="#"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/github.svg" alt="GitHub"></a>
+      <a href="#"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/instagram.svg" alt="Instagram"></a>
+      <a href="#"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/twitter.svg" alt="Twitter"></a>
+      <a href="#"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/linkedin.svg" alt="LinkedIn"></a>
+      <a href="#"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/codepen.svg" alt="Codepen"></a>
+    </aside>
     <div id="ayuda-modal" class="modal-ayuda">
         <div class="modal-ayuda-contenido">
             <h2>¿Cómo funciona?</h2>
             <ul>
                 <li>Mira el video al menos 15 segundos sin adelantar ni retroceder.</li>
                 <li>Ver el video me ayuda a crecer en YouTube. ¡Tu apoyo es muy valioso!</li>
-                <span class="info-github">No se te pedirá ningún dato personal en ningún momento. El código de esta página es público y puedes revisarlo en <a href="https://github.com/zerotechyt/validador_de_videos" target="_blank">GitHub</a>, así que es segura.</span>
+                <span class="info-github">No se te pedirá ningún dato personal en ningún momento. El código de esta página es público y puedes revisarlo en <a href="https://github.com/Zero3-web/Video_Validator" target="_blank">GitHub</a>, así que es segura.</span>
 
             </ul>
             <button onclick="cerrarAyuda()">De acuerdo, Continuar!</button>
         </div>
     </div>
     <h1>Zero Tech - Youtube</h1>
-    <div id="video-container">
-        <div id="player"></div>
+    <div id="video-container" style="background:#fff;border-radius:16px;box-shadow:0 4px 24px rgba(0,0,0,0.10);padding:18px;max-width:600px;margin:0 auto 24px;">
+        <iframe id="player" width="560" height="315" src="https://www.youtube.com/embed/xQByz0Kv3L4?enablejsapi=1&wmode=opaque" frameborder="0" allowfullscreen
+            style="background:#fff;border-radius:12px;display:block;margin:0 auto;"></iframe>
+        <!-- Video insertado como iframe pero con enablejsapi=1 para permitir control JS -->
     </div>
-    <div id="timer-container" style="width:90px;margin:20px auto;">
-        <svg id="timer-svg" width="80" height="80" viewBox="0 0 100 100">
-            <circle cx="50" cy="50" r="45" stroke="#eee" stroke-width="10" fill="none"/>
-            <circle id="timer-progress" cx="50" cy="50" r="45" stroke="#2196f3" stroke-width="10" fill="none"
-                stroke-linecap="round" stroke-dasharray="282.743" stroke-dashoffset="0" />
+    <div id="timer-container" style="width:110px;margin:20px auto;">
+        <svg id="timer-svg" width="100" height="100" viewBox="0 0 100 100" style="display:block;margin:0 auto;">
+            <defs>
+                <linearGradient id="timer-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#64ffda"/>
+                    <stop offset="100%" stop-color="#233554"/>
+                </linearGradient>
+                <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+                    <feGaussianBlur stdDeviation="3.5" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>
+            <!-- Fondo gris azulado principal -->
+            <circle cx="50" cy="50" r="44" stroke="#233554" stroke-width="10" fill="none"/>
+            <!-- Progreso con gradiente y glow -->
+            <circle id="timer-progress" cx="50" cy="50" r="44" stroke="url(#timer-gradient)" stroke-width="10" fill="none"
+                stroke-linecap="round" stroke-dasharray="276.46" stroke-dashoffset="0" filter="url(#glow)" />
+            <!-- Icono de reloj en el centro -->
+            <g>
+                <circle cx="50" cy="50" r="18" fill="#fff" opacity="0.97"/>
+                <circle cx="50" cy="50" r="16" fill="none" stroke="#64ffda" stroke-width="2"/>
+                <rect x="49" y="38" width="2" height="13" rx="1" fill="#233554"/>
+                <rect x="50" y="50" width="1.5" height="8" rx="0.75" fill="#64ffda" transform="rotate(45 50 50)"/>
+                <circle cx="50" cy="50" r="2.5" fill="#233554"/>
+            </g>
         </svg>
+        <style>
+        /* Animación de glow */
+        #timer-progress {
+            filter: url(#glow);
+            transition: stroke-dashoffset 0.3s cubic-bezier(.4,2,.6,1);
+        }
+        #timer-svg g circle:first-child {
+            /* Sombra suave al fondo del reloj */
+            filter: drop-shadow(0 2px 8px rgba(35,53,84,0.10));
+        }
+        </style>
     </div>
     <div id="contador-container">
-        Debes ver al menos <span id="tiempo-restante">15</span> segundos del video.
+        Debes ver al menos <span id="tiempo-restante">300</span> segundos del video.
     </div>
     <div id="mensaje"></div>
     <!-- Modal de Vale de Felicitación -->
@@ -43,7 +155,7 @@
             <div id="vale-contenido" style="background:#f9f9f9;border-radius:10px;padding:18px 10px;box-shadow:0 2px 12px rgba(0,0,0,0.07);margin-bottom:10px;position:relative;">
                 <div style="position:absolute;top:10px;right:10px;opacity:0.15;">
                     <!-- Marca de agua: reemplaza src por tu imagen -->
-                    <img id="marca-agua" src="marcadeagua.png" alt="Marca de agua" style="width:80px;"/>
+                    <img id="marca-agua" src="Img/marcadeagua.png" alt="Marca de agua" style="width:80px;"/>
                 </div>
                 <div style="font-size:1.1em;margin-bottom:8px;">Vale generado el <span id="vale-fecha"></span></div>
                 <div style="font-size:1.3em;font-weight:bold;margin-bottom:8px;">Código: <span id="vale-codigo"></span></div>
@@ -54,20 +166,51 @@
     </div>
     <!-- Opcional: advertencia -->
     <!-- <div style="color:#888;font-size:0.9em;text-align:center;">Protección activa: No intentes manipular la página.</div> -->
+    <script src="https://www.youtube.com/iframe_api?cachebust=" + Date.now()></script>
+    <script src="../Js/script.js"></script>
+    <script src="Js/script_VV.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
-    <script src="https://www.youtube.com/iframe_api"></script>
-    <script src="Js/script.js"></script>
-    <!-- Redes sociales al pie -->
-    <div class="footer-redes">
-        <a href="https://www.youtube.com/@zerotechyt" target="_blank" title="YouTube">
-            <svg viewBox="0 0 24 24"><path d="M23.5 6.2s-.2-1.7-.8-2.4c-.7-.8-1.5-.8-1.9-.9C17.2 2.7 12 2.7 12 2.7h0s-5.2 0-8.8.2c-.4 0-1.2.1-1.9.9C.7 4.5.5 6.2.5 6.2S.3 8 .3 9.7v1.6c0 1.7.2 3.5.2 3.5s.2 1.7.8 2.4c.7.8 1.7.8 2.1.9 1.5.1 6.6.2 6.6.2s5.2 0 8.8-.2c.4 0 1.2-.1 1.9-.9.6-.7.8-2.4.8-2.4s.2-1.7.2-3.5v-1.6c0-1.7-.2-3.5-.2-3.5zM9.8 14.6V7.4l6.4 3.6-6.4 3.6z"/></svg>
-        </a>
-        <a href="https://www.instagram.com/zerotechyt" target="_blank" title="Instagram">
-            <svg viewBox="0 0 24 24"><path d="M12 2.2c3.2 0 3.6 0 4.9.1 1.2.1 1.9.2 2.3.4.6.2 1 .5 1.4 1 .4.4.7.8 1 1.4.2.4.3 1.1.4 2.3.1 1.3.1 1.7.1 4.9s0 3.6-.1 4.9c-.1 1.2-.2 1.9-.4 2.3-.2.6-.5 1-1 1.4-.4.4-.8.7-1.4 1-.4.2-1.1.3-2.3.4-1.3.1-1.7.1-4.9.1s-3.6 0-4.9-.1c-1.2-.1-1.9-.2-2.3-.4-.6-.2-1-.5-1.4-1-.4-.4-.7-.8-1-1.4-.2-.4-.3-1.1-.4-2.3C2.2 15.6 2.2 15.2 2.2 12s0-3.6.1-4.9c.1-1.2.2-1.9.4-2.3.2-.6.5-1 1-1.4.4-.4.8-.7 1.4-1 .4-.2 1.1-.3 2.3-.4C8.4 2.2 8.8 2.2 12 2.2zm0-2.2C8.7 0 8.3 0 7 .1 5.7.2 4.7.4 3.9.7c-.9.3-1.7.8-2.4 1.5C.4 3.3-.1 4.1-.4 5c-.3.8-.5 1.8-.6 3.1C-.1 8.3 0 8.7 0 12c0 3.3.1 3.7.1 4.9.1 1.3.3 2.3.6 3.1.3.9.8 1.7 1.5 2.4.7.7 1.5 1.2 2.4 1.5.8.3 1.8.5 3.1.6C8.3 24 8.7 24 12 24s3.7-.1 4.9-.1c1.3-.1 2.3-.3 3.1-.6.9-.3 1.7-.8 2.4-1.5.7-.7 1.2-1.5 1.5-2.4.3-.8.5-1.8.6-3.1.1-1.2.1-1.6.1-4.9s0-3.7-.1-4.9c-.1-1.3-.3-2.3-.6-3.1-.3-.9-.8-1.7-1.5-2.4-.7-.7-1.5-1.2-2.4-1.5-.8-.3-1.8-.5-3.1-.6C15.7 0 15.3 0 12 0zm0 5.8a6.2 6.2 0 1 0 0 12.4 6.2 6.2 0 0 0 0-12.4zm0 10.2a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm7.8-10.4a1.4 1.4 0 1 1-2.8 0 1.4 1.4 0 0 1 2.8 0z"/></svg>
-        </a>
-        <a href="https://t.me/zerotechyt" target="_blank" title="Telegram">
-            <svg viewBox="0 0 24 24"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.6 0 12 0zm5.6 8.2l-1.7 8.1c-.1.6-.5.7-1 .5l-2.7-2-1.3 1.2c-.1.1-.2.2-.4.2l.2-3.1 5.7-5.1c.2-.2-.1-.3-.3-.2l-7 4.4-3-1c-.7-.2-.7-.7.1-1l12-4.6c.5-.2 1 .1.8 1z"/></svg>
-        </a>
-    </div>
+    <script>
+      // Hamburguesa menú responsive para Validador_De_videos
+      (function() {
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.querySelector('.nav-links');
+        if (hamburger && navLinks) {
+          hamburger.addEventListener('click', function(e) {
+            e.stopPropagation();
+            hamburger.classList.toggle('active');
+            navLinks.classList.toggle('open');
+            document.body.classList.toggle('nav-open');
+          });
+          // Cierra el menú al hacer click en un enlace
+          navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', function() {
+              hamburger.classList.remove('active');
+              navLinks.classList.remove('open');
+              document.body.classList.remove('nav-open');
+            });
+          });
+          // Cierra el menú al hacer click fuera
+          document.addEventListener('click', function(e) {
+            if (navLinks.classList.contains('open') && !navLinks.contains(e.target) && e.target !== hamburger) {
+              hamburger.classList.remove('active');
+              navLinks.classList.remove('open');
+              document.body.classList.remove('nav-open');
+            }
+          });
+        }
+      })();
+    </script>
+    <!-- Footer igual al principal -->
+    <footer class="footer" id="contact">
+      <div class="footer-content">
+        <p>Designed &amp; built by Zero &copy; 2024</p>
+        <div class="footer-socials">
+          <a href="#"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/github.svg" alt="GitHub"></a>
+          <a href="#"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/linkedin.svg" alt="LinkedIn"></a>
+          <a href="#"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/twitter.svg" alt="Twitter"></a>
+        </div>
+      </div>
+    </footer>
 </body>
 </html>
